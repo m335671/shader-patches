@@ -83,6 +83,14 @@ pub fn load(prepared: &PreparedImage, dir: &Path) -> Result<LoadedImage> {
     if !loaded.info.is_dll() {
         // SAFETY: just mapped, and no title code has run.
         unsafe { crate::tls::redirect(loaded.base(), &loaded.info) }?;
+        // SAFETY: the executable was just mapped without running its entry point.
+        unsafe {
+            crate::render_scale::apply(
+                loaded.base(),
+                loaded.info.size_of_image as usize,
+                &prepared.original_hash,
+            )
+        }?;
     }
     tracing::info!(
         base = format_args!("{:#x}", loaded.base()),

@@ -35,6 +35,8 @@ mod thunks;
 #[cfg(windows)]
 mod tls;
 #[cfg(windows)]
+mod render_scale;
+#[cfg(windows)]
 mod windows;
 
 #[cfg(windows)]
