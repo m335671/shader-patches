@@ -1387,6 +1387,8 @@ pub(crate) fn warp_adapter() -> windows::core::Result<IDXGIAdapter> {
     }
 }
 
+pub(crate) mod awake;
+
 #[cfg(test)]
 mod tests {
     /// Run once with VICTORY_CARD_SYNC_BATCH=0 and once with it set to 1.
@@ -5125,6 +5127,7 @@ impl Host {
     /// behind them, and an idle stretch of the card, if one was under way,
     /// ends here ([`CARD_CLOCK_US`]).
     fn card_sent(&self) {
+        awake::sent(&self.device);
         let Some(clock) = self.card_clock() else {
             return;
         };
